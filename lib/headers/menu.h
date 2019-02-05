@@ -1,24 +1,16 @@
 #pragma once
 
-#ifdef UTILSLIB_EXPORTS
-#define UTILSLIB_API __declspec(dllexport)
-#else
-#define UTILSLIB_API __declspec(dllimport)
-#endif
-
-#include "utilslib.h"
-
 #include <string>
 #include <vector>
 
 namespace efiilj
 {
 	
-	class UTILSLIB_API Menu
+	class Menu
 	{
 	private:
 
-		class UTILSLIB_API MenuItem
+		class MenuItem
 		{
 		private:
 			Menu* subMenu;
@@ -35,13 +27,10 @@ namespace efiilj
 
 			bool Invoke() const;
 
-			//friend class Menu;
 		};
 
 		std::vector<MenuItem> _items;
 		bool _isSubmenu = false;
-
-		//friend class MenuItem;
 
 	public:
 		Menu(std::string title = "", std::string prompt = "> ");
