@@ -14,11 +14,13 @@ namespace efiilj
 	{
 		Node* n = new Node(val);
 
-		if (_head != nullptr)
+		if (_count > 0)
 		{
 			_head->_next = n;
 			n->_prev = _head;
 		}
+		else
+			_tail = n;
 
 		_head = n;
 		
@@ -29,12 +31,14 @@ namespace efiilj
 	bool DoublyLinkedList<T>::Remove(int index)
 	{
 		Node* n = GetNode(index);
+
 		if (n != nullptr)
 		{
-			_count--;
 			RemoveNode(n);
+			_count--;
 			return true;
 		}
+
 		return false;
 	}
 
@@ -44,8 +48,8 @@ namespace efiilj
 		Node* n = GetNode(val);
 		if (n != nullptr)
 		{
-			_count--;
 			RemoveNode(n);
+			_count--;
 			return true;
 		}
 		return false;
@@ -134,8 +138,6 @@ namespace efiilj
 	}
 
 	template <typename T>
-	DoublyLinkedList<T>::~DoublyLinkedList()
-	{
-	}
+	DoublyLinkedList<T>::~DoublyLinkedList() { }
 
 }
