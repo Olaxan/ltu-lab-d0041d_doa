@@ -105,4 +105,10 @@ int ArrayDB::CountCourses()
 	return courses.Count();
 }
 
-ArrayDB::~ArrayDB() { }
+ArrayDB::~ArrayDB()
+{
+	for (int i = 0; i < CountStudents(); i++)
+	{
+		delete students[i];
+	}
+}

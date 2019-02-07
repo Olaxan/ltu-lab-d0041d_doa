@@ -81,7 +81,7 @@ bool LinkedListDB::RemoveCourse(Course * course)
 
 Course * LinkedListDB::GetCourse(std::string name)
 {
-	//Fix this
+	//Inefficiency.
 	for (int i = 0; i < courses.Count(); i++)
 	{
 		if (courses[i]->name == name)
@@ -104,4 +104,10 @@ int LinkedListDB::CountCourses()
 	return courses.Count();
 }
 
-LinkedListDB::~LinkedListDB() { }
+LinkedListDB::~LinkedListDB()
+{
+	for (int i = 0; i < CountStudents(); i++)
+	{
+		delete students[i];
+	}
+}
