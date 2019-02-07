@@ -31,16 +31,18 @@ namespace efiilj
 		Node* Tail() const { return _tail; };
 		
 		void Insert(T val);
-		void Remove(int index);
+		bool Remove(int index);
+		bool Remove(T val);
+		T Get(int index) const;
 
-		std::string ToString();
+		std::string ToString() const;
 		int Count() const { return _count; };
 
-		Node* Find(T val);
-		Node* GetNode(int index);
-		T Get(int index);
+		Node* GetNode(T val) const;
+		Node* GetNode(int index) const;
+		void RemoveNode(Node* node);
 		
-		//TODO: operators
+		T operator [] (int index) const { return Get(index); }
 
 		~DoublyLinkedList();
 	};

@@ -1,6 +1,5 @@
 #include "lnklist_d.h"
 
-#include <stdexcept>
 #include <sstream>
 #include <iostream>
 
@@ -8,10 +7,7 @@ namespace efiilj
 {
 
 	template <typename T>
-	DoublyLinkedList<T>::DoublyLinkedList()
-	{
-
-	}
+	DoublyLinkedList<T>::DoublyLinkedList() { }
 
 	template<typename T>
 	void DoublyLinkedList<T>::Insert(T val)
@@ -30,33 +26,33 @@ namespace efiilj
 	}
 
 	template<typename T>
-	void DoublyLinkedList<T>::Remove(int index)
+	bool DoublyLinkedList<T>::Remove(int index)
 	{
-		_count--;
-
 		Node* n = GetNode(index);
-
-		if (n == _head)
+		if (n != nullptr)
 		{
-			n->_prev->_next = nullptr;
-			_head = n->_prev;
+			_count--;
+			RemoveNode(n);
+			return true;
 		}
-		else if (n == _tail)
-		{
-			n->_next->_next = nullptr;
-			_tail = n->_next;
-		}
-		else
-		{
-			n->_next->_prev = n->_prev;
-			n->_prev->_next = n->_next;
-		}
-
-		delete n;
+		return false;
 	}
 
 	template<typename T>
-	std::string DoublyLinkedList<T>::ToString()
+	bool DoublyLinkedList<T>::Remove(T val)
+	{
+		Node* n = GetNode(val);
+		if (n != nullptr)
+		{
+			_count--;
+			RemoveNode(n);
+			return true;
+		}
+		return false;
+	}
+
+	template<typename T>
+	std::string DoublyLinkedList<T>::ToString() const
 	{
 		std::stringstream ss;
 
@@ -70,7 +66,7 @@ namespace efiilj
 	}
 
 	template<typename T>
-	typename DoublyLinkedList<T>::Node* DoublyLinkedList<T>::Find(T val)
+	typename DoublyLinkedList<T>::Node* DoublyLinkedList<T>::GetNode(T val) const
 	{
 		Node* n = _head;
 
@@ -84,10 +80,10 @@ namespace efiilj
 	}
 
 	template<typename T>
-	typename DoublyLinkedList<T>::Node* DoublyLinkedList<T>::GetNode(int index)
+	typename DoublyLinkedList<T>::Node* DoublyLinkedList<T>::GetNode(int index) const
 	{
 		if (index < 0 || index > _count - 1)
-			throw std::out_of_range("Linked list index out of range");
+			return nullptr;
 		else
 		{
 			Node* n = _head;
@@ -102,7 +98,37 @@ namespace efiilj
 	}
 
 	template<typename T>
-	T DoublyLinkedList<T>::Get(int index)
+	inline void DoublyLinkedList<T>::RemoveNode(Node* node)
+	{
+		if (_count <= 1)
+		{
+			_head = nullptr;
+			_tail = nullptr;
+		}
+		else
+		{
+			if (node == _head)
+			{
+				node->_prev->_next = nullptr;
+				_head = node->_prev;
+			}
+			else if (node == _tail)
+			{
+				node->_next->_next = nullptr;
+				_tail = node->_next;
+			}
+			else
+			{
+				node->_next->_prev = node->_prev;
+				node->_prev->_next = node->_next;
+			}
+		}
+
+		delete node;
+	}
+
+	template<typename T>
+	T DoublyLinkedList<T>::Get(int index) const
 	{
 		return GetNode(index)->_value;
 	}

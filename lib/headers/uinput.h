@@ -9,13 +9,21 @@
 namespace efiilj
 {
 
-	template<class, class = std::void_t<>>
-	struct is_streamable : std::false_type {};
+	template<typename S, typename T, typename = void>
+	struct is_stream_extractable : std::false_type {};
 
-	template<class T>
-	struct is_streamable<T,
-		std::void_t<decltype(std::declval<std::istream&>() >> std::declval<T&>())>
-	> : std::true_type { };
+	template<typename S, typename T>
+	struct is_stream_extractable<S, T,
+		std::void_t<  decltype(std::declval<S&>() >> std::declval<T>())  > >
+		: std::true_type {};
+
+	template<typename S, typename T, typename = void>
+	struct is_stream_insertable : std::false_type {};
+
+	template<typename S, typename T>
+	struct is_stream_insertable<S, T,
+		std::void_t<  decltype(std::declval<S&>() << std::declval<T>())  > >
+		: std::true_type {};
 
 	template <typename T>
 	class UserInput
@@ -50,12 +58,15 @@ namespace efiilj
 			_max = max;
 		}
 
-		bool Show(); // Non-comparable
+		std::string exit;
+
+		bool Show();
 
 		T Value() { return _value; };
 
-		bool operator == (bool state);
-		bool operator != (bool state);
+		bool operator == (bool state) { return _state; }
+		bool operator != (bool state) { return !_state; }
+		explicit operator bool() const { return _state; }
 
 		~UserInput();
 	};

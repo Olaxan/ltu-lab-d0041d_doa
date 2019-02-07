@@ -15,29 +15,29 @@ namespace efiilj
 	}
 
 	template <typename T>
-	void SortedArray<T>::addAt(int index, T value)
+	void SortedArray<T>::AddAt(int index, T value)
 	{
-		resize(_count + 1);
+		Resize(_count + 1);
 		memmove(_items + index + 1, _items + index, sizeof(T) * (_count - index));
 		_items[index] = value;
 		_count++;
 	}
 
 	template <typename T>
-	void SortedArray<T>::remAt(int index)
+	void SortedArray<T>::RemoveAt(int index)
 	{
 		memmove(_items + index, _items + index + 1, sizeof(T) * (_count - index));
 		_count--;
 	}
 
 	template <typename T>
-	T SortedArray<T>::getAt(int index)
+	T SortedArray<T>::GetAt(int index) const
 	{
 		return _items[index];
 	}
 
 	template <typename T>
-	void SortedArray<T>::resize(int newSize)
+	void SortedArray<T>::Resize(int newSize)
 	{
 		T* _new = new T[newSize];
 		memcpy_s(_new, newSize * sizeof(T), _items, _count * sizeof(T));
@@ -46,7 +46,7 @@ namespace efiilj
 	}
 
 	template <typename T>
-	int SortedArray<T>::find(T value)
+	int SortedArray<T>::Find(T value) const
 	{
 		int upper = _count - 1;
 		int lower = 0;
@@ -59,7 +59,7 @@ namespace efiilj
 			if (_items[mid] == value)
 				return mid;
 
-			if (descending ^ comparator(value, _items[mid]))
+			if (descending ^ Comparator(value, _items[mid]))
 				lower = mid + 1;
 			else
 				upper = mid - 1;
@@ -69,40 +69,46 @@ namespace efiilj
 	}
 
 	template <typename T>
-	bool SortedArray<T>::exists(T value)
+	bool SortedArray<T>::Exists(T value) const
 	{
-		return (find(value) != -1);
+		return (Find(value) != -1);
 	}
 
 	template <typename T>
-	void SortedArray<T>::insert(T value)
+	void SortedArray<T>::Insert(T value)
 	{
 		//TODO: This could use binary search for efficiency.
 		for (int i = 0; i < _count; i++)
 		{
-			if (descending ^ comparator(_items[i], value))
+			if (descending ^ Comparator(_items[i], value))
 			{
-				addAt(i, value);
+				AddAt(i, value);
 				return;
 			}
 		}
-		addAt(_count, value);
+		AddAt(_count, value);
 	}
 
 	template <typename T>
-	void SortedArray<T>::remove(T value)
+	void SortedArray<T>::Remove(T value)
 	{
 		for (int i = 0; i < _count;)
 		{
 			if (_items[i] == value)
-				remAt(i);
+				RemoveAt(i);
 			else
 				i++;
 		}
 	}
 
+	template<typename T>
+	inline void SortedArray<T>::Remove(int index)
+	{
+		Remove(GetAt(index));
+	}
+
 	template <typename T>
-	std::string SortedArray<T>::to_string()
+	std::string SortedArray<T>::ToString() const
 	{
 		std::stringstream ss;
 		ss << "[";
@@ -120,7 +126,7 @@ namespace efiilj
 	}
 
 	template <typename T>
-	int SortedArray<T>::count()
+	int SortedArray<T>::Count() const
 	{
 		return _count;
 	}
